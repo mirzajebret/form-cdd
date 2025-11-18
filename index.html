@@ -1,0 +1,2559 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem CDD Korporasi - Notaris</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+        }
+        
+        .sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        .step-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .step-progress::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .step-progress .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 20%;
+        }
+        
+        .step-progress .step .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            color: #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 5px;
+            font-weight: bold;
+        }
+        
+        .step-progress .step.active .step-circle {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .step-progress .step.completed .step-circle {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .step-progress .step .step-label {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .step-progress .step.active .step-label {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .form-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-section h5 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .risk-score {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .risk-low {
+            color: #28a745;
+        }
+        
+        .risk-medium {
+            color: #ffc107;
+        }
+        
+        .risk-high {
+            color: #dc3545;
+        }
+        
+        .dashboard-card {
+            transition: transform 0.3s;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .table-responsive {
+            max-height: 500px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .file-upload {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--secondary-color);
+        }
+        
+        .file-upload i {
+            font-size: 2rem;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload.active {
+            border-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .beneficial-owner-table {
+            margin-top: 15px;
+        }
+        
+        .beneficial-owner-table th {
+            background-color: #f8f9fa;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            display: none;
+        }
+        
+        .search-box {
+            max-width: 300px;
+        }
+        
+        .data-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stats-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-building"></i> Sistem CDD Korporasi - Notaris
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="navbar-text me-3">
+                    <i class="bi bi-person-circle"></i> Admin Kantor Notaris
+                </span>
+                <button class="btn btn-outline-light btn-sm" id="btn-logout">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification -->
+    <div class="alert alert-success notification" id="notification" role="alert">
+        <i class="bi bi-check-circle-fill"></i> <span id="notification-message">Operasi berhasil</span>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-section="dashboard">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="form-cdd">
+                            <i class="bi bi-plus-circle"></i> Form CDD Baru
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="data-nasabah">
+                            <i class="bi bi-list-ul"></i> Data Nasabah
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="laporan-risiko">
+                            <i class="bi bi-graph-up"></i> Laporan Risiko
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-section="pengaturan">
+                            <i class="bi bi-gear"></i> Pengaturan
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 ms-sm-auto px-4 py-4">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="content-section active">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Dashboard CDD Korporasi</h2>
+                        <div class="d-flex">
+                            <button class="btn btn-primary me-2" id="btn-new-cdd">
+                                <i class="bi bi-plus-circle"></i> CDD Baru
+                            </button>
+                            <button class="btn btn-outline-secondary" id="btn-refresh-dashboard">
+                                <i class="bi bi-arrow-clockwise"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card stats-card dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Nasabah</h5>
+                                    <div class="number text-primary" id="total-nasabah">0</div>
+                                    <p class="card-text">Korporasi terdaftar</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Risiko Rendah</h5>
+                                    <div class="number text-success" id="risk-low-count">0</div>
+                                    <p class="card-text">Nasabah</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Risiko Sedang</h5>
+                                    <div class="number text-warning" id="risk-medium-count">0</div>
+                                    <p class="card-text">Nasabah</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stats-card dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Risiko Tinggi</h5>
+                                    <div class="number text-danger" id="risk-high-count">0</div>
+                                    <p class="card-text">Nasabah</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent CDD Entries -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Data Nasabah Korporasi Terbaru</h5>
+                            <div class="d-flex">
+                                <input type="text" class="form-control form-control-sm search-box me-2" placeholder="Cari nasabah..." id="search-nasabah">
+                                <button class="btn btn-sm btn-light me-2" id="btn-export-excel">
+                                    <i class="bi bi-file-earmark-excel"></i> Export
+                                </button>
+                                <button class="btn btn-sm btn-light" id="btn-print-report">
+                                    <i class="bi bi-printer"></i> Cetak
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Korporasi</th>
+                                            <th>Bentuk Korporasi</th>
+                                            <th>Tanggal Transaksi</th>
+                                            <th>Jenis Jasa</th>
+                                            <th>Skor Risiko</th>
+                                            <th>Kategori</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="nasabah-table-body">
+                                        <!-- Data akan diisi oleh JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center" id="pagination-container">
+                                    <!-- Pagination akan diisi oleh JavaScript -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form CDD Section -->
+                <div id="form-cdd-section" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Formulir Customer Due Diligence (CDD) Korporasi</h2>
+                        <button class="btn btn-outline-secondary" id="btn-back-dashboard">
+                            <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
+                        </button>
+                    </div>
+                    
+                    <!-- Progress Steps -->
+                    <div class="step-progress">
+                        <div class="step active" data-step="1">
+                            <div class="step-circle">1</div>
+                            <div class="step-label">Informasi Dasar</div>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">Informasi Kekayaan</div>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">Pemilik Manfaat</div>
+                        </div>
+                        <div class="step" data-step="4">
+                            <div class="step-circle">4</div>
+                            <div class="step-label">Informasi Kuasa</div>
+                        </div>
+                        <div class="step" data-step="5">
+                            <div class="step-circle">5</div>
+                            <div class="step-label">Jasa yang Diberikan</div>
+                        </div>
+                        <div class="step" data-step="6">
+                            <div class="step-circle">6</div>
+                            <div class="step-label">Penilaian Risiko</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Form Steps -->
+                    <form id="cdd-form">
+                        <!-- Step 1: Informasi Dasar Pengguna Jasa -->
+                        <div class="form-step active" id="step-1">
+                            <div class="form-section">
+                                <h5>A. INFORMASI DASAR PENGGUNA JASA</h5>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="nama-korporasi" class="form-label">Nama Korporasi <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nama-korporasi" required>
+                                        <div class="invalid-feedback">Nama korporasi harus diisi</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Bentuk Korporasi <span class="text-danger">*</span></label>
+                                        <div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bentuk-korporasi" id="pt" value="PT" checked>
+                                                <label class="form-check-label" for="pt">Perseroan Terbatas (PT)</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bentuk-korporasi" id="cv" value="CV">
+                                                <label class="form-check-label" for="cv">CV</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bentuk-korporasi" id="firma" value="Firma">
+                                                <label class="form-check-label" for="firma">Firma</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bentuk-korporasi" id="yayasan" value="Yayasan">
+                                                <label class="form-check-label" for="yayasan">Yayasan</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bentuk-korporasi" id="koperasi" value="Koperasi">
+                                                <label class="form-check-label" for="koperasi">Koperasi</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bentuk-korporasi" id="lainnya" value="Lainnya">
+                                                <label class="form-check-label" for="lainnya">Lainnya</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="no-sk-pengesahan" class="form-label">No. SK Pengesahan</label>
+                                        <input type="text" class="form-control" id="no-sk-pengesahan">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="tanggal-sk-pengesahan" class="form-label">Tanggal SK Pengesahan</label>
+                                        <input type="date" class="form-control" id="tanggal-sk-pengesahan">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="no-ijin-usaha" class="form-label">No. Ijin Usaha</label>
+                                        <input type="text" class="form-control" id="no-ijin-usaha">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="tanggal-ijin-usaha" class="form-label">Tanggal Ijin Usaha</label>
+                                        <input type="date" class="form-control" id="tanggal-ijin-usaha">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="npwp" class="form-label">Nomor Pokok Wajib Pajak (NPWP) <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="npwp" placeholder="XX.XXX.XXX.X-XXX.XXX" required>
+                                        <div class="invalid-feedback">Format NPWP tidak valid</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="bidang-usaha" class="form-label">Bidang Usaha <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="bidang-usaha" required>
+                                        <div class="invalid-feedback">Bidang usaha harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="alamat-akta" class="form-label">Alamat Korporasi sesuai Akta <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="alamat-akta" rows="3" required></textarea>
+                                        <div class="invalid-feedback">Alamat akta harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="alamat-usaha" class="form-label">Alamat Lokasi Usaha <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="alamat-usaha" rows="3" required></textarea>
+                                        <div class="invalid-feedback">Alamat usaha harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="provinsi" class="form-label">Provinsi <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="provinsi" required>
+                                            <option value="">Pilih Provinsi</option>
+                                            <option value="DKI Jakarta">DKI Jakarta</option>
+                                            <option value="Jawa Barat">Jawa Barat</option>
+                                            <option value="Jawa Tengah">Jawa Tengah</option>
+                                            <option value="Jawa Timur">Jawa Timur</option>
+                                            <option value="Bali">Bali</option>
+                                            <option value="Sumatera Utara">Sumatera Utara</option>
+                                            <option value="Sumatera Barat">Sumatera Barat</option>
+                                            <option value="Sumatera Selatan">Sumatera Selatan</option>
+                                            <option value="Riau">Riau</option>
+                                            <option value="Kalimantan Timur">Kalimantan Timur</option>
+                                            <option value="Kalimantan Selatan">Kalimantan Selatan</option>
+                                            <option value="Sulawesi Selatan">Sulawesi Selatan</option>
+                                            <option value="Sulawesi Utara">Sulawesi Utara</option>
+                                            <option value="Nusa Tenggara Barat">Nusa Tenggara Barat</option>
+                                            <option value="Nusa Tenggara Timur">Nusa Tenggara Timur</option>
+                                            <option value="Papua">Papua</option>
+                                            <option value="Maluku">Maluku</option>
+                                            <option value="Lainnya">Lainnya</option>
+                                        </select>
+                                        <div class="invalid-feedback">Provinsi harus dipilih</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="no-akta-pendirian" class="form-label">No. Akta Pendirian atau Akta Kepengurusan Terakhir <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="no-akta-pendirian" required>
+                                        <div class="invalid-feedback">Nomor akta harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="telepon-korporasi" class="form-label">Nomor Telepon Korporasi <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="telepon-korporasi" required>
+                                        <div class="invalid-feedback">Nomor telepon harus diisi</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="faksimili" class="form-label">Nomor Faksimili (jika ada)</label>
+                                        <input type="text" class="form-control" id="faksimili">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-secondary" id="btn-to-dashboard">Kembali ke Dashboard</button>
+                                <button type="button" class="btn btn-primary" id="btn-next-1">Selanjutnya</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Informasi Kekayaan -->
+                        <div class="form-step" id="step-2">
+                            <div class="form-section">
+                                <h5>B. INFORMASI KEKAYAAN</h5>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="sumber-dana" class="form-label">Sumber Dana/Kekayaan <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="sumber-dana" required>
+                                            <option value="">Pilih Sumber Dana</option>
+                                            <option value="Hasil Usaha">Hasil Usaha</option>
+                                            <option value="Warisan">Warisan</option>
+                                            <option value="Hibah">Hibah</option>
+                                            <option value="Investasi">Investasi</option>
+                                            <option value="Lainnya">Lainnya</option>
+                                        </select>
+                                        <div class="invalid-feedback">Sumber dana harus dipilih</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="nilai-aset" class="form-label">Estimasi Nilai Aset (Rp) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="nilai-aset" min="0" required>
+                                        <div class="invalid-feedback">Nilai aset harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="omzet-tahunan" class="form-label">Omzet Tahunan (Rp) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="omzet-tahunan" min="0" required>
+                                        <div class="invalid-feedback">Omzet tahunan harus diisi</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="jumlah-karyawan" class="form-label">Jumlah Karyawan <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="jumlah-karyawan" min="0" required>
+                                        <div class="invalid-feedback">Jumlah karyawan harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <label class="form-label">Kepemilikan Aset</label>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="tanah-bangunan">
+                                            <label class="form-check-label" for="tanah-bangunan">Tanah dan Bangunan</label>
+                                            <input type="text" class="form-control mt-1" id="detail-tanah" placeholder="Detail Tanah dan Bangunan" style="display: none;">
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="kendaraan">
+                                            <label class="form-check-label" for="kendaraan">Kendaraan</label>
+                                            <input type="text" class="form-control mt-1" id="detail-kendaraan" placeholder="Detail Kendaraan" style="display: none;">
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="rekening-bank">
+                                            <label class="form-check-label" for="rekening-bank">Rekening Bank</label>
+                                            <input type="text" class="form-control mt-1" id="detail-rekening" placeholder="Nama Bank dan Nomor Rekening" style="display: none;">
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="investasi-saham">
+                                            <label class="form-check-label" for="investasi-saham">Investasi/Saham</label>
+                                            <input type="text" class="form-control mt-1" id="detail-investasi" placeholder="Detail Investasi/Saham" style="display: none;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-secondary" id="btn-prev-2">Sebelumnya</button>
+                                <button type="button" class="btn btn-primary" id="btn-next-2">Selanjutnya</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Pemilik Manfaat -->
+                        <div class="form-step" id="step-3">
+                            <div class="form-section">
+                                <h5>C. PEMILIK MANFAAT (Beneficial Owner)</h5>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <p class="mb-0">Tambah informasi pemilik manfaat perusahaan</p>
+                                    <button type="button" class="btn btn-sm btn-primary" id="btn-tambah-pemilik">
+                                        <i class="bi bi-plus-circle"></i> Tambah Pemilik Manfaat
+                                    </button>
+                                </div>
+                                
+                                <div class="table-responsive beneficial-owner-table">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Lengkap</th>
+                                                <th>NIK</th>
+                                                <th>Alamat</th>
+                                                <th>Persentase Kepemilikan</th>
+                                                <th>Jabatan</th>
+                                                <th>Nomor Telepon</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="pemilik-table-body">
+                                            <!-- Baris akan ditambahkan secara dinamis -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-secondary" id="btn-prev-3">Sebelumnya</button>
+                                <button type="button" class="btn btn-primary" id="btn-next-3">Selanjutnya</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 4: Informasi Kuasa -->
+                        <div class="form-step" id="step-4">
+                            <div class="form-section">
+                                <h5>D. INFORMASI KUASA</h5>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Apakah menggunakan kuasa? <span class="text-danger">*</span></label>
+                                        <div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="menggunakan-kuasa" id="kuasa-ya" value="Ya">
+                                                <label class="form-check-label" for="kuasa-ya">Ya</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="menggunakan-kuasa" id="kuasa-tidak" value="Tidak" checked>
+                                                <label class="form-check-label" for="kuasa-tidak">Tidak</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="form-kuasa" style="display: none;">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="nama-kuasa" class="form-label">Nama Kuasa <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="nama-kuasa">
+                                            <div class="invalid-feedback">Nama kuasa harus diisi</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="nik-kuasa" class="form-label">NIK Kuasa <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="nik-kuasa" maxlength="16">
+                                            <div class="invalid-feedback">NIK harus 16 digit</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label for="alamat-kuasa" class="form-label">Alamat Kuasa <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" id="alamat-kuasa" rows="3"></textarea>
+                                            <div class="invalid-feedback">Alamat kuasa harus diisi</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="no-surat-kuasa" class="form-label">No. Surat Kuasa <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="no-surat-kuasa">
+                                            <div class="invalid-feedback">Nomor surat kuasa harus diisi</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="tanggal-surat-kuasa" class="form-label">Tanggal Surat Kuasa <span class="text-danger">*</span></label>
+                                            <input type="date" class="form-control" id="tanggal-surat-kuasa">
+                                            <div class="invalid-feedback">Tanggal surat kuasa harus diisi</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Upload Surat Kuasa <span class="text-danger">*</span></label>
+                                            <div class="file-upload" id="file-upload-area">
+                                                <i class="bi bi-cloud-upload"></i>
+                                                <p>Klik untuk mengunggah file atau seret file ke sini</p>
+                                                <p class="small text-muted">Format: PDF, JPG (Maks. 5MB)</p>
+                                                <input type="file" id="surat-kuasa-file" accept=".pdf,.jpg,.jpeg" style="display: none;">
+                                            </div>
+                                            <div id="file-name" class="mt-2"></div>
+                                            <div class="invalid-feedback">Surat kuasa harus diunggah</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-secondary" id="btn-prev-4">Sebelumnya</button>
+                                <button type="button" class="btn btn-primary" id="btn-next-4">Selanjutnya</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 5: Jasa yang Diberikan -->
+                        <div class="form-step" id="step-5">
+                            <div class="form-section">
+                                <h5>E. JASA YANG DIBERIKAN</h5>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="jenis-jasa" class="form-label">Jenis Jasa Notaris <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="jenis-jasa" required>
+                                            <option value="">Pilih Jenis Jasa</option>
+                                            <option value="Pengelolaan terhadap Uang, Efek, dan/atau Produk Jasa">Pengelolaan terhadap Uang, Efek, dan/atau Produk Jasa</option>
+                                            <option value="Pengoperasian dan Pengelolaan Perusahaan">Pengoperasian dan Pengelolaan Perusahaan</option>
+                                            <option value="Pengelolaan Rekening Giro, Rekening Tabungan, Rekening Deposito, dan/atau Rekening Efek">Pengelolaan Rekening Giro, Rekening Tabungan, Rekening Deposito, dan/atau Rekening Efek</option>
+                                            <option value="Pembelian dan Penjualan Properti">Pembelian dan Penjualan Properti</option>
+                                            <option value="Penugasan Pembelian dan Penjualan Badan Usaha">Penugasan Pembelian dan Penjualan Badan Usaha</option>
+                                            <option value="Penitipan Pembayaran Pajak terkait Pengalihan Properti">Penitipan Pembayaran Pajak terkait Pengalihan Properti</option>
+                                            <option value="Penugasan Pendirian Badan Usaha">Penugasan Pendirian Badan Usaha</option>
+                                            <option value="Lain-lain">Lain-lain</option>
+                                        </select>
+                                        <div class="invalid-feedback">Jenis jasa harus dipilih</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="tanggal-transaksi" class="form-label">Tanggal Transaksi/Menghadap <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="tanggal-transaksi" required>
+                                        <div class="invalid-feedback">Tanggal transaksi harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="detail-jasa" class="form-label">Detail Jasa <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="detail-jasa" required>
+                                        <div class="invalid-feedback">Detail jasa harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="nilai-transaksi" class="form-label">Nilai Transaksi (Rp) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="nilai-transaksi" min="0" required>
+                                        <div class="invalid-feedback">Nilai transaksi harus diisi</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="keterangan-tambahan" class="form-label">Keterangan Tambahan (opsional)</label>
+                                        <textarea class="form-control" id="keterangan-tambahan" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-secondary" id="btn-prev-5">Sebelumnya</button>
+                                <button type="button" class="btn btn-primary" id="btn-next-5">Selanjutnya</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 6: Penilaian Risiko -->
+                        <div class="form-step" id="step-6">
+                            <div class="form-section">
+                                <h5>F. PENILAIAN RISIKO</h5>
+                                
+                                <div class="row mb-4">
+                                    <div class="col-md-12 text-center">
+                                        <h5>Total Skor Risiko</h5>
+                                        <div class="risk-score" id="total-skor">0</div>
+                                        <div id="kategori-risiko" class="fw-bold fs-5">-</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="profil-korporasi" class="form-label">Profil Korporasi (skor 0-20)</label>
+                                        <input type="range" class="form-range" id="profil-korporasi" min="0" max="20" value="0">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0</span>
+                                            <span id="profil-korporasi-value">0</span>
+                                            <span>20</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="profil-bisnis" class="form-label">Profil Bisnis (skor 0-20)</label>
+                                        <input type="range" class="form-range" id="profil-bisnis" min="0" max="20" value="0">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0</span>
+                                            <span id="profil-bisnis-value">0</span>
+                                            <span>20</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="wilayah-negara" class="form-label">Wilayah/Negara Asal (skor 0-20)</label>
+                                        <input type="range" class="form-range" id="wilayah-negara" min="0" max="20" value="0">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0</span>
+                                            <span id="wilayah-negara-value">0</span>
+                                            <span>20</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="jenis-jasa-risiko" class="form-label">Jenis Jasa (skor 0-20)</label>
+                                        <input type="range" class="form-range" id="jenis-jasa-risiko" min="0" max="20" value="0">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0</span>
+                                            <span id="jenis-jasa-risiko-value">0</span>
+                                            <span>20</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="nilai-transaksi-risiko" class="form-label">Nilai Transaksi (skor 0-20)</label>
+                                        <input type="range" class="form-range" id="nilai-transaksi-risiko" min="0" max="20" value="0">
+                                        <div class="d-flex justify-content-between">
+                                            <span>0</span>
+                                            <span id="nilai-transaksi-risiko-value">0</span>
+                                            <span>20</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="keterangan-penilaian" class="form-label">Keterangan Penilaian</label>
+                                        <textarea class="form-control" id="keterangan-penilaian" rows="3" readonly></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="rekomendasi-tindakan" class="form-label">Rekomendasi Tindakan</label>
+                                        <textarea class="form-control" id="rekomendasi-tindakan" rows="3" readonly></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-secondary" id="btn-prev-6">Sebelumnya</button>
+                                <button type="button" class="btn btn-success" id="btn-simpan-data">Simpan Data</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Data Nasabah Section -->
+                <div id="data-nasabah-section" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Data Nasabah Korporasi</h2>
+                        <div class="d-flex">
+                            <button class="btn btn-primary me-2" id="btn-new-cdd-2">
+                                <i class="bi bi-plus-circle"></i> CDD Baru
+                            </button>
+                            <button class="btn btn-outline-secondary" id="btn-refresh-data">
+                                <i class="bi bi-arrow-clockwise"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="data-actions">
+                        <input type="text" class="form-control search-box" placeholder="Cari nasabah..." id="search-data-nasabah">
+                        <select class="form-select" id="filter-risk" style="max-width: 200px;">
+                            <option value="">Semua Risiko</option>
+                            <option value="Rendah">Risiko Rendah</option>
+                            <option value="Sedang">Risiko Sedang</option>
+                            <option value="Tinggi">Risiko Tinggi</option>
+                        </select>
+                        <select class="form-select" id="filter-bentuk" style="max-width: 200px;">
+                            <option value="">Semua Bentuk</option>
+                            <option value="PT">PT</option>
+                            <option value="CV">CV</option>
+                            <option value="Firma">Firma</option>
+                            <option value="Yayasan">Yayasan</option>
+                            <option value="Koperasi">Koperasi</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <button class="btn btn-light" id="btn-export-data">
+                            <i class="bi bi-file-earmark-excel"></i> Export
+                        </button>
+                        <button class="btn btn-light" id="btn-print-data">
+                            <i class="bi bi-printer"></i> Cetak
+                        </button>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Korporasi</th>
+                                            <th>Bentuk</th>
+                                            <th>NPWP</th>
+                                            <th>Bidang Usaha</th>
+                                            <th>Tanggal Transaksi</th>
+                                            <th>Jenis Jasa</th>
+                                            <th>Skor</th>
+                                            <th>Kategori</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="data-nasabah-table-body">
+                                        <!-- Data akan diisi oleh JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav>
+                                <ul class="pagination justify-content-center" id="pagination-data-nasabah">
+                                    <!-- Pagination akan diisi oleh JavaScript -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Laporan Risiko Section -->
+                <div id="laporan-risiko-section" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Laporan Analisis Risiko</h2>
+                        <div class="d-flex">
+                            <button class="btn btn-primary me-2" id="btn-generate-report">
+                                <i class="bi bi-graph-up"></i> Generate Laporan
+                            </button>
+                            <button class="btn btn-outline-secondary" id="btn-export-report">
+                                <i class="bi bi-file-earmark-pdf"></i> Export PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Distribusi Risiko Nasabah</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="riskChart" height="250"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Statistik Risiko</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6>Rata-rata Skor Risiko</h6>
+                                        <div class="fs-4 fw-bold text-primary" id="avg-risk-score">0</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Nasabah dengan Risiko Tinggi</h6>
+                                        <div class="fs-4 fw-bold text-danger" id="high-risk-count">0</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6>Tren Bulan Ini</h6>
+                                        <div class="fs-4 fw-bold text-success" id="month-trend">+0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Nasabah dengan Risiko Tinggi</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Korporasi</th>
+                                            <th>Bentuk</th>
+                                            <th>Skor</th>
+                                            <th>Kategori</th>
+                                            <th>Tanggal Penilaian</th>
+                                            <th>Rekomendasi</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="high-risk-table-body">
+                                        <!-- Data akan diisi oleh JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pengaturan Section -->
+                <div id="pengaturan-section" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Pengaturan Sistem</h2>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Parameter Penilaian Risiko</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="risk-settings-form">
+                                        <div class="mb-3">
+                                            <label for="threshold-low" class="form-label">Batas Risiko Rendah (maksimal)</label>
+                                            <input type="number" class="form-control" id="threshold-low" value="20" min="0" max="100">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="threshold-medium" class="form-label">Batas Risiko Sedang (maksimal)</label>
+                                            <input type="number" class="form-control" id="threshold-medium" value="40" min="0" max="100">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="threshold-high" class="form-label">Batas Risiko Tinggi</label>
+                                            <input type="number" class="form-control" id="threshold-high" value="100" min="0" max="100" readonly>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" id="btn-save-settings">Simpan Pengaturan</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Backup & Pemulihan Data</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Backup Data</label>
+                                        <div>
+                                            <button class="btn btn-outline-primary me-2" id="btn-backup-json">
+                                                <i class="bi bi-download"></i> Backup JSON
+                                            </button>
+                                            <button class="btn btn-outline-primary" id="btn-backup-csv">
+                                                <i class="bi bi-download"></i> Backup CSV
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="restore-file" class="form-label">Pulihkan Data</label>
+                                        <input type="file" class="form-control" id="restore-file" accept=".json,.csv">
+                                        <div class="mt-2">
+                                            <button class="btn btn-outline-warning" id="btn-restore-data">
+                                                <i class="bi bi-upload"></i> Pulihkan Data
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> 
+                                        <strong>Peringatan:</strong> Pulihkan data hanya dari sumber terpercaya. 
+                                        Proses ini akan menggantikan data yang ada.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Tambah Pemilik Manfaat -->
+    <div class="modal fade" id="modalPemilik" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Pemilik Manfaat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-pemilik">
+                        <div class="mb-3">
+                            <label for="modal-nama" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal-nama" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal-nik" class="form-label">NIK (16 digit) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal-nik" maxlength="16" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal-alamat" class="form-label">Alamat <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="modal-alamat" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal-persentase" class="form-label">Persentase Kepemilikan (%) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="modal-persentase" min="0" max="100" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal-jabatan" class="form-label">Jabatan dalam Korporasi <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal-jabatan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal-telepon" class="form-label">Nomor Telepon <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal-telepon" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="btn-simpan-pemilik">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail Nasabah -->
+    <div class="modal fade" id="modalDetail" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Nasabah Korporasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modal-detail-body">
+                    <!-- Detail akan diisi oleh JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" id="btn-cetak-detail">
+                        <i class="bi bi-printer"></i> Cetak
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data storage menggunakan localStorage
+        const STORAGE_KEY = 'cdd_korporasi_data';
+        const SETTINGS_KEY = 'cdd_korporasi_settings';
+
+        // Inisialisasi data
+        let currentStep = 1;
+        let beneficialOwners = [];
+        let editOwnerIndex = -1;
+        let nasabahData = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let riskChart = null;
+
+        // Data sample untuk inisialisasi
+        const sampleData = [
+            { 
+                id: 1, 
+                nama: "PT Maju Jaya Abadi", 
+                bentuk: "PT", 
+                npwp: "12.345.678.9-012.345",
+                bidangUsaha: "Perdagangan Umum",
+                tanggal: "2023-05-15", 
+                jasa: "Pendirian Badan Usaha", 
+                skor: 18, 
+                kategori: "Rendah",
+                provinsi: "Jawa Barat",
+                alamat: "Jl. Merdeka No. 123, Bandung",
+                nilaiTransaksi: 50000000,
+                beneficialOwners: [
+                    { nama: "Budi Santoso", nik: "1234567890123456", alamat: "Jl. Kenangan No. 45", persentase: 60, jabatan: "Direktur Utama", telepon: "081234567890" }
+                ]
+            },
+            { 
+                id: 2, 
+                nama: "CV Berkah Sejahtera", 
+                bentuk: "CV", 
+                npwp: "98.765.432.1-098.765",
+                bidangUsaha: "Jasa Konsultan",
+                tanggal: "2023-06-22", 
+                jasa: "Pembelian Properti", 
+                skor: 35, 
+                kategori: "Sedang",
+                provinsi: "DKI Jakarta",
+                alamat: "Jl. Sudirman Kav. 25, Jakarta Selatan",
+                nilaiTransaksi: 250000000,
+                beneficialOwners: [
+                    { nama: "Siti Rahayu", nik: "2345678901234567", alamat: "Jl. Melati No. 78", persentase: 100, jabatan: "Pemilik", telepon: "082345678901" }
+                ]
+            },
+            { 
+                id: 3, 
+                nama: "PT Global Mandiri", 
+                bentuk: "PT", 
+                npwp: "11.222.333.4-555.666",
+                bidangUsaha: "Ekspor-Impor",
+                tanggal: "2023-07-10", 
+                jasa: "Pengelolaan Rekening", 
+                skor: 52, 
+                kategori: "Tinggi",
+                provinsi: "Jawa Timur",
+                alamat: "Jl. Raya Darmo No. 89, Surabaya",
+                nilaiTransaksi: 1500000000,
+                beneficialOwners: [
+                    { nama: "Ahmad Wijaya", nik: "3456789012345678", alamat: "Jl. Anggrek No. 12", persentase: 40, jabatan: "Komisaris", telepon: "083456789012" },
+                    { nama: "Dewi Lestari", nik: "4567890123456789", alamat: "Jl. Mawar No. 34", persentase: 30, jabatan: "Direktur", telepon: "084567890123" }
+                ]
+            },
+            { 
+                id: 4, 
+                nama: "Yayasan Pendidikan Nusantara", 
+                bentuk: "Yayasan", 
+                npwp: "77.888.999.0-111.222",
+                bidangUsaha: "Pendidikan",
+                tanggal: "2023-08-05", 
+                jasa: "Penugasan Pengelolaan", 
+                skor: 22, 
+                kategori: "Sedang",
+                provinsi: "Jawa Tengah",
+                alamat: "Jl. Pendidikan No. 56, Semarang",
+                nilaiTransaksi: 75000000,
+                beneficialOwners: [
+                    { nama: "Prof. Dr. H. Sutrisno", nik: "5678901234567890", alamat: "Jl. Akademik No. 67", persentase: 0, jabatan: "Ketua Yayasan", telepon: "085678901234" }
+                ]
+            },
+            { 
+                id: 5, 
+                nama: "PT Sinar Harapan", 
+                bentuk: "PT", 
+                npwp: "33.444.555.6-777.888",
+                bidangUsaha: "Manufaktur",
+                tanggal: "2023-09-18", 
+                jasa: "Penjualan Badan Usaha", 
+                skor: 15, 
+                kategori: "Rendah",
+                provinsi: "Bali",
+                alamat: "Jl. Sunset Road No. 78, Denpasar",
+                nilaiTransaksi: 1200000000,
+                beneficialOwners: [
+                    { nama: "Ketut Wirya", nik: "6789012345678901", alamat: "Jl. Kuta No. 90", persentase: 70, jabatan: "Direktur Utama", telepon: "086789012345" }
+                ]
+            },
+            { 
+                id: 6, 
+                nama: "Koperasi Sejahtera Bersama", 
+                bentuk: "Koperasi", 
+                npwp: "44.555.666.7-888.999",
+                bidangUsaha: "Simpan Pinjam",
+                tanggal: "2023-10-11", 
+                jasa: "Pengelolaan Uang", 
+                skor: 28, 
+                kategori: "Sedang",
+                provinsi: "Sumatera Utara",
+                alamat: "Jl. Koperasi No. 12, Medan",
+                nilaiTransaksi: 300000000,
+                beneficialOwners: [
+                    { nama: "M. Ridwan", nik: "7890123456789012", alamat: "Jl. Sejahtera No. 34", persentase: 10, jabatan: "Ketua", telepon: "087890123456" },
+                    { nama: "Sari Indah", nik: "8901234567890123", alamat: "Jl. Bahagia No. 56", persentase: 8, jabatan: "Bendahara", telepon: "088901234567" }
+                ]
+            },
+            { 
+                id: 7, 
+                nama: "PT Bumi Alam Lestari", 
+                bentuk: "PT", 
+                npwp: "55.666.777.8-999.000",
+                bidangUsaha: "Perkebunan",
+                tanggal: "2023-11-03", 
+                jasa: "Pembayaran Pajak", 
+                skor: 45, 
+                kategori: "Tinggi",
+                provinsi: "Kalimantan Timur",
+                alamat: "Jl. Perkebunan No. 45, Samarinda",
+                nilaiTransaksi: 800000000,
+                beneficialOwners: [
+                    { nama: "H. Abdul Rahman", nik: "9012345678901234", alamat: "Jl. Sawit No. 67", persentase: 55, jabatan: "Komisaris Utama", telepon: "089012345678" }
+                ]
+            },
+            { 
+                id: 8, 
+                nama: "Firma Hukum Adil", 
+                bentuk: "Firma", 
+                npwp: "66.777.888.9-000.111",
+                bidangUsaha: "Jasa Hukum",
+                tanggal: "2023-12-14", 
+                jasa: "Pendirian Badan Usaha", 
+                skor: 12, 
+                kategori: "Rendah",
+                provinsi: "DKI Jakarta",
+                alamat: "Jl. Hukum No. 89, Jakarta Pusat",
+                nilaiTransaksi: 150000000,
+                beneficialOwners: [
+                    { nama: "Dr. Bambang S.H., M.H.", nik: "0123456789012345", alamat: "Jl. Keadilan No. 12", persentase: 50, jabatan: "Partner", telepon: "081123456789" },
+                    { nama: "Drs. Santoso, S.H.", nik: "1122334455667788", alamat: "Jl. Kebenaran No. 34", persentase: 50, jabatan: "Partner", telepon: "082234567890" }
+                ]
+            },
+            { 
+                id: 9, 
+                nama: "PT Teknologi Inovasi", 
+                bentuk: "PT", 
+                npwp: "22.333.444.5-666.777",
+                bidangUsaha: "Teknologi Informasi",
+                tanggal: "2024-01-22", 
+                jasa: "Pengoperasian Perusahaan", 
+                skor: 32, 
+                kategori: "Sedang",
+                provinsi: "Jawa Barat",
+                alamat: "Jl. Teknologi No. 56, Bandung",
+                nilaiTransaksi: 500000000,
+                beneficialOwners: [
+                    { nama: "Andi Prasetyo", nik: "2233445566778899", alamat: "Jl. Inovasi No. 78", persentase: 45, jabatan: "Direktur Teknologi", telepon: "083345678901" }
+                ]
+            },
+            { 
+                id: 10, 
+                nama: "CV Mandiri Jaya", 
+                bentuk: "CV", 
+                npwp: "88.999.000.1-222.333",
+                bidangUsaha: "Konstruksi",
+                tanggal: "2024-02-05", 
+                jasa: "Penjualan Properti", 
+                skor: 48, 
+                kategori: "Tinggi",
+                provinsi: "Jawa Timur",
+                alamat: "Jl. Konstruksi No. 90, Surabaya",
+                nilaiTransaksi: 950000000,
+                beneficialOwners: [
+                    { nama: "Joko Susilo", nik: "3344556677889900", alamat: "Jl. Bangunan No. 23", persentase: 75, jabatan: "Pemilik", telepon: "084456789012" }
+                ]
+            }
+        ];
+
+        // Default settings
+        const defaultSettings = {
+            thresholdLow: 20,
+            thresholdMedium: 40,
+            thresholdHigh: 100
+        };
+
+        // Fungsi untuk memuat data dari localStorage
+        function loadData() {
+            const storedData = localStorage.getItem(STORAGE_KEY);
+            if (storedData) {
+                nasabahData = JSON.parse(storedData);
+            } else {
+                // Jika tidak ada data, gunakan sample data
+                nasabahData = sampleData;
+                saveData();
+            }
+        }
+
+        // Fungsi untuk menyimpan data ke localStorage
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(nasabahData));
+        }
+
+        // Fungsi untuk memuat pengaturan
+        function loadSettings() {
+            const storedSettings = localStorage.getItem(SETTINGS_KEY);
+            if (storedSettings) {
+                return JSON.parse(storedSettings);
+            } else {
+                // Jika tidak ada pengaturan, gunakan default
+                saveSettings(defaultSettings);
+                return defaultSettings;
+            }
+        }
+
+        // Fungsi untuk menyimpan pengaturan
+        function saveSettings(settings) {
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        }
+
+        // Fungsi untuk menampilkan notifikasi
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notification-message');
+            
+            notificationMessage.textContent = message;
+            notification.className = `alert alert-${type} notification`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Fungsi untuk memformat tanggal
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        // Fungsi untuk memformat angka sebagai Rupiah
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        }
+
+        // Fungsi untuk navigasi antar section
+        function showSection(sectionId) {
+            // Sembunyikan semua section
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Tampilkan section yang dipilih
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update sidebar
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.querySelector(`.sidebar .nav-link[data-section="${sectionId}"]`).classList.add('active');
+            
+            // Jika section adalah dashboard, muat ulang data
+            if (sectionId === 'dashboard-section') {
+                loadDashboardData();
+            } else if (sectionId === 'data-nasabah-section') {
+                loadDataNasabah();
+            } else if (sectionId === 'laporan-risiko-section') {
+                loadLaporanRisiko();
+            } else if (sectionId === 'pengaturan-section') {
+                loadPengaturan();
+            }
+        }
+
+        // Fungsi untuk navigasi form step
+        function showStep(step) {
+            // Sembunyikan semua step
+            document.querySelectorAll('.form-step').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Tampilkan step yang dipilih
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            // Update progress indicator
+            document.querySelectorAll('.step').forEach(el => {
+                el.classList.remove('active', 'completed');
+            });
+            
+            for (let i = 1; i <= step; i++) {
+                const stepEl = document.querySelector(`.step[data-step="${i}"]`);
+                if (i === step) {
+                    stepEl.classList.add('active');
+                } else {
+                    stepEl.classList.add('completed');
+                }
+            }
+            
+            currentStep = step;
+        }
+
+        // Fungsi untuk validasi step
+        function validateStep(step) {
+            let isValid = true;
+            const form = document.getElementById('cdd-form');
+            
+            if (step === 1) {
+                const requiredFields = ['nama-korporasi', 'npwp', 'bidang-usaha', 'alamat-akta', 'alamat-usaha', 'provinsi', 'no-akta-pendirian', 'telepon-korporasi'];
+                
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value.trim()) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+                
+                // Validasi format NPWP
+                const npwp = document.getElementById('npwp').value;
+                const npwpRegex = /^\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3}$/;
+                if (!npwpRegex.test(npwp)) {
+                    document.getElementById('npwp').classList.add('is-invalid');
+                    isValid = false;
+                }
+            }
+            
+            // Validasi untuk step lainnya
+            if (step === 2) {
+                const requiredFields = ['sumber-dana', 'nilai-aset', 'omzet-tahunan', 'jumlah-karyawan'];
+                
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value || field.value <= 0) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+            }
+            
+            if (step === 3) {
+                if (beneficialOwners.length === 0) {
+                    showNotification('Minimal harus ada satu pemilik manfaat', 'warning');
+                    isValid = false;
+                }
+            }
+            
+            if (step === 4) {
+                const menggunakanKuasa = document.querySelector('input[name="menggunakan-kuasa"]:checked').value;
+                
+                if (menggunakanKuasa === 'Ya') {
+                    const requiredFields = ['nama-kuasa', 'nik-kuasa', 'alamat-kuasa', 'no-surat-kuasa', 'tanggal-surat-kuasa'];
+                    
+                    requiredFields.forEach(fieldId => {
+                        const field = document.getElementById(fieldId);
+                        if (!field.value.trim()) {
+                            field.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            field.classList.remove('is-invalid');
+                        }
+                    });
+                    
+                    // Validasi file upload
+                    const fileInput = document.getElementById('surat-kuasa-file');
+                    if (!fileInput.files.length) {
+                        document.getElementById('file-upload-area').classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        document.getElementById('file-upload-area').classList.remove('is-invalid');
+                    }
+                }
+            }
+            
+            if (step === 5) {
+                const requiredFields = ['jenis-jasa', 'tanggal-transaksi', 'detail-jasa', 'nilai-transaksi'];
+                
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value || (field.type === 'number' && field.value <= 0)) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+            }
+            
+            return isValid;
+        }
+
+        // Fungsi untuk menghitung skor risiko
+        function calculateRiskScore() {
+            const profilKorporasi = parseInt(document.getElementById('profil-korporasi').value);
+            const profilBisnis = parseInt(document.getElementById('profil-bisnis').value);
+            const wilayahNegara = parseInt(document.getElementById('wilayah-negara').value);
+            const jenisJasa = parseInt(document.getElementById('jenis-jasa-risiko').value);
+            const nilaiTransaksi = parseInt(document.getElementById('nilai-transaksi-risiko').value);
+            
+            const totalScore = profilKorporasi + profilBisnis + wilayahNegara + jenisJasa + nilaiTransaksi;
+            
+            document.getElementById('total-skor').textContent = totalScore;
+            
+            const settings = loadSettings();
+            let kategori = '';
+            let keterangan = '';
+            let rekomendasi = '';
+            
+            if (totalScore <= settings.thresholdLow) {
+                kategori = 'Rendah';
+                document.getElementById('total-skor').className = 'risk-score risk-low';
+                keterangan = 'Nasabah memiliki profil risiko rendah. Transaksi dapat diproses dengan monitoring standar.';
+                rekomendasi = 'Lanjutkan proses dengan monitoring reguler. Tidak diperlukan tindakan khusus.';
+            } else if (totalScore <= settings.thresholdMedium) {
+                kategori = 'Sedang';
+                document.getElementById('total-skor').className = 'risk-score risk-medium';
+                keterangan = 'Nasabah memiliki profil risiko sedang. Diperlukan due diligence tambahan.';
+                rekomendasi = 'Lakukan verifikasi dokumen tambahan dan monitoring yang lebih ketat.';
+            } else {
+                kategori = 'Tinggi';
+                document.getElementById('total-skor').className = 'risk-score risk-high';
+                keterangan = 'Nasabah memiliki profil risiko tinggi. Diperlukan due diligence yang mendalam.';
+                rekomendasi = 'Lakukan due diligence menyeluruh, verifikasi dokumen lengkap, dan dapatkan persetujuan atasan sebelum melanjutkan.';
+            }
+            
+            document.getElementById('kategori-risiko').textContent = kategori;
+            document.getElementById('keterangan-penilaian').value = keterangan;
+            document.getElementById('rekomendasi-tindakan').value = rekomendasi;
+            
+            return { totalScore, kategori, keterangan, rekomendasi };
+        }
+
+        // Fungsi untuk menampilkan/menyembunyikan form kuasa
+        function toggleKuasaForm() {
+            const formKuasa = document.getElementById('form-kuasa');
+            const menggunakanKuasa = document.querySelector('input[name="menggunakan-kuasa"]:checked').value;
+            
+            if (menggunakanKuasa === 'Ya') {
+                formKuasa.style.display = 'block';
+            } else {
+                formKuasa.style.display = 'none';
+            }
+        }
+
+        // Fungsi untuk menampilkan detail aset
+        function toggleAssetDetail(checkboxId, inputId) {
+            const checkbox = document.getElementById(checkboxId);
+            const input = document.getElementById(inputId);
+            
+            if (checkbox.checked) {
+                input.style.display = 'block';
+            } else {
+                input.style.display = 'none';
+            }
+        }
+
+        // Fungsi untuk menambahkan pemilik manfaat
+        function addBeneficialOwner(owner) {
+            beneficialOwners.push(owner);
+            updateBeneficialOwnersTable();
+        }
+
+        // Fungsi untuk memperbarui tabel pemilik manfaat
+        function updateBeneficialOwnersTable() {
+            const tableBody = document.getElementById('pemilik-table-body');
+            tableBody.innerHTML = '';
+            
+            beneficialOwners.forEach((owner, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${owner.nama}</td>
+                    <td>${owner.nik}</td>
+                    <td>${owner.alamat}</td>
+                    <td>${owner.persentase}%</td>
+                    <td>${owner.jabatan}</td>
+                    <td>${owner.telepon}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-warning edit-owner" data-index="${index}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-owner" data-index="${index}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Tambahkan event listener untuk tombol edit dan hapus
+            document.querySelectorAll('.edit-owner').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    editBeneficialOwner(index);
+                });
+            });
+            
+            document.querySelectorAll('.delete-owner').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteBeneficialOwner(index);
+                });
+            });
+        }
+
+        // Fungsi untuk mengedit pemilik manfaat
+        function editBeneficialOwner(index) {
+            const owner = beneficialOwners[index];
+            document.getElementById('modal-nama').value = owner.nama;
+            document.getElementById('modal-nik').value = owner.nik;
+            document.getElementById('modal-alamat').value = owner.alamat;
+            document.getElementById('modal-persentase').value = owner.persentase;
+            document.getElementById('modal-jabatan').value = owner.jabatan;
+            document.getElementById('modal-telepon').value = owner.telepon;
+            
+            editOwnerIndex = index;
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalPemilik'));
+            modal.show();
+        }
+
+        // Fungsi untuk menghapus pemilik manfaat
+        function deleteBeneficialOwner(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus pemilik manfaat ini?')) {
+                beneficialOwners.splice(index, 1);
+                updateBeneficialOwnersTable();
+            }
+        }
+
+        // Fungsi untuk memuat data dashboard
+        function loadDashboardData() {
+            // Hitung statistik
+            const totalNasabah = nasabahData.length;
+            const riskLowCount = nasabahData.filter(n => n.kategori === 'Rendah').length;
+            const riskMediumCount = nasabahData.filter(n => n.kategori === 'Sedang').length;
+            const riskHighCount = nasabahData.filter(n => n.kategori === 'Tinggi').length;
+            
+            // Update statistik cards
+            document.getElementById('total-nasabah').textContent = totalNasabah;
+            document.getElementById('risk-low-count').textContent = riskLowCount;
+            document.getElementById('risk-medium-count').textContent = riskMediumCount;
+            document.getElementById('risk-high-count').textContent = riskHighCount;
+            
+            // Tampilkan data terbaru (10 data pertama)
+            const tableBody = document.getElementById('nasabah-table-body');
+            tableBody.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, nasabahData.length);
+            const currentData = nasabahData.slice(startIndex, endIndex);
+            
+            currentData.forEach(data => {
+                const row = document.createElement('tr');
+                
+                let riskClass = '';
+                if (data.kategori === 'Rendah') riskClass = 'table-success';
+                else if (data.kategori === 'Sedang') riskClass = 'table-warning';
+                else if (data.kategori === 'Tinggi') riskClass = 'table-danger';
+                
+                row.innerHTML = `
+                    <td>${data.id}</td>
+                    <td>${data.nama}</td>
+                    <td>${data.bentuk}</td>
+                    <td>${formatDate(data.tanggal)}</td>
+                    <td>${data.jasa}</td>
+                    <td>${data.skor}</td>
+                    <td><span class="badge ${riskClass}">${data.kategori}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary view-detail" data-id="${data.id}">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary edit-data" data-id="${data.id}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-data" data-id="${data.id}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Setup pagination
+            setupPagination('pagination-container', nasabahData.length, currentPage);
+            
+            // Tambahkan event listener untuk tombol aksi
+            document.querySelectorAll('.view-detail').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    showDetailModal(id);
+                });
+            });
+            
+            document.querySelectorAll('.edit-data').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editData(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-data').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteData(id);
+                });
+            });
+        }
+
+        // Fungsi untuk setup pagination
+        function setupPagination(containerId, totalItems, currentPage) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const paginationContainer = document.getElementById(containerId);
+            paginationContainer.innerHTML = '';
+            
+            // Tombol Previous
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>`;
+            paginationContainer.appendChild(prevLi);
+            
+            // Numbered pages
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                pageLi.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+                paginationContainer.appendChild(pageLi);
+            }
+            
+            // Tombol Next
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>`;
+            paginationContainer.appendChild(nextLi);
+            
+            // Tambahkan event listener untuk pagination
+            paginationContainer.querySelectorAll('.page-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = parseInt(this.getAttribute('data-page'));
+                    if (page && page !== currentPage) {
+                        currentPage = page;
+                        loadDashboardData();
+                    }
+                });
+            });
+        }
+
+        // Fungsi untuk menampilkan modal detail
+        function showDetailModal(id) {
+            const data = nasabahData.find(n => n.id === id);
+            if (!data) return;
+            
+            const modalBody = document.getElementById('modal-detail-body');
+            modalBody.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Informasi Dasar</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Nama Korporasi</strong></td>
+                                <td>${data.nama}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bentuk Korporasi</strong></td>
+                                <td>${data.bentuk}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>NPWP</strong></td>
+                                <td>${data.npwp}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bidang Usaha</strong></td>
+                                <td>${data.bidangUsaha}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Provinsi</strong></td>
+                                <td>${data.provinsi}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Informasi Transaksi</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Tanggal Transaksi</strong></td>
+                                <td>${formatDate(data.tanggal)}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Jenis Jasa</strong></td>
+                                <td>${data.jasa}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nilai Transaksi</strong></td>
+                                <td>${formatRupiah(data.nilaiTransaksi)}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skor Risiko</strong></td>
+                                <td>${data.skor}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kategori Risiko</strong></td>
+                                <td><span class="badge ${data.kategori === 'Rendah' ? 'bg-success' : data.kategori === 'Sedang' ? 'bg-warning' : 'bg-danger'}">${data.kategori}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6>Pemilik Manfaat</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>NIK</th>
+                                        <th>Alamat</th>
+                                        <th>Persentase</th>
+                                        <th>Jabatan</th>
+                                        <th>Telepon</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.beneficialOwners.map(owner => `
+                                        <tr>
+                                            <td>${owner.nama}</td>
+                                            <td>${owner.nik}</td>
+                                            <td>${owner.alamat}</td>
+                                            <td>${owner.persentase}%</td>
+                                            <td>${owner.jabatan}</td>
+                                            <td>${owner.telepon}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalDetail'));
+            modal.show();
+        }
+
+        // Fungsi untuk mengedit data
+        function editData(id) {
+            // Implementasi edit data
+            showNotification('Fitur edit data akan segera tersedia', 'info');
+        }
+
+        // Fungsi untuk menghapus data
+        function deleteData(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data nasabah ini?')) {
+                nasabahData = nasabahData.filter(n => n.id !== id);
+                saveData();
+                loadDashboardData();
+                showNotification('Data nasabah berhasil dihapus', 'success');
+            }
+        }
+
+        // Fungsi untuk memuat data nasabah di section Data Nasabah
+        function loadDataNasabah() {
+            const tableBody = document.getElementById('data-nasabah-table-body');
+            tableBody.innerHTML = '';
+            
+            // Filter data berdasarkan pencarian dan filter
+            const searchTerm = document.getElementById('search-data-nasabah').value.toLowerCase();
+            const riskFilter = document.getElementById('filter-risk').value;
+            const bentukFilter = document.getElementById('filter-bentuk').value;
+            
+            let filteredData = nasabahData.filter(data => {
+                const matchesSearch = data.nama.toLowerCase().includes(searchTerm) || 
+                                    data.npwp.includes(searchTerm) ||
+                                    data.bidangUsaha.toLowerCase().includes(searchTerm);
+                const matchesRisk = !riskFilter || data.kategori === riskFilter;
+                const matchesBentuk = !bentukFilter || data.bentuk === bentukFilter;
+                
+                return matchesSearch && matchesRisk && matchesBentuk;
+            });
+            
+            // Tampilkan data yang sudah difilter
+            filteredData.forEach(data => {
+                const row = document.createElement('tr');
+                
+                let riskClass = '';
+                if (data.kategori === 'Rendah') riskClass = 'bg-success';
+                else if (data.kategori === 'Sedang') riskClass = 'bg-warning';
+                else if (data.kategori === 'Tinggi') riskClass = 'bg-danger';
+                
+                row.innerHTML = `
+                    <td>${data.id}</td>
+                    <td>${data.nama}</td>
+                    <td>${data.bentuk}</td>
+                    <td>${data.npwp}</td>
+                    <td>${data.bidangUsaha}</td>
+                    <td>${formatDate(data.tanggal)}</td>
+                    <td>${data.jasa}</td>
+                    <td>${data.skor}</td>
+                    <td><span class="badge ${riskClass}">${data.kategori}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary view-detail-2" data-id="${data.id}">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary edit-data-2" data-id="${data.id}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-data-2" data-id="${data.id}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Setup pagination
+            setupPagination('pagination-data-nasabah', filteredData.length, currentPage);
+            
+            // Tambahkan event listener untuk tombol aksi
+            document.querySelectorAll('.view-detail-2').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    showDetailModal(id);
+                });
+            });
+            
+            document.querySelectorAll('.edit-data-2').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editData(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-data-2').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteData(id);
+                });
+            });
+        }
+
+        // Fungsi untuk memuat laporan risiko
+        function loadLaporanRisiko() {
+            // Hitung statistik
+            const totalNasabah = nasabahData.length;
+            const riskLowCount = nasabahData.filter(n => n.kategori === 'Rendah').length;
+            const riskMediumCount = nasabahData.filter(n => n.kategori === 'Sedang').length;
+            const riskHighCount = nasabahData.filter(n => n.kategori === 'Tinggi').length;
+            
+            const avgRiskScore = totalNasabah > 0 ? 
+                Math.round(nasabahData.reduce((sum, n) => sum + n.skor, 0) / totalNasabah) : 0;
+            
+            // Update statistik
+            document.getElementById('avg-risk-score').textContent = avgRiskScore;
+            document.getElementById('high-risk-count').textContent = riskHighCount;
+            
+            // Hitung tren (sederhana - dalam implementasi nyata akan lebih kompleks)
+            const monthTrend = '+5%';
+            document.getElementById('month-trend').textContent = monthTrend;
+            
+            // Buat chart
+            const ctx = document.getElementById('riskChart').getContext('2d');
+            
+            if (riskChart) {
+                riskChart.destroy();
+            }
+            
+            riskChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Risiko Rendah', 'Risiko Sedang', 'Risiko Tinggi'],
+                    datasets: [{
+                        data: [riskLowCount, riskMediumCount, riskHighCount],
+                        backgroundColor: [
+                            '#28a745',
+                            '#ffc107',
+                            '#dc3545'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribusi Risiko Nasabah'
+                        }
+                    }
+                }
+            });
+            
+            // Tampilkan data nasabah dengan risiko tinggi
+            const highRiskData = nasabahData.filter(n => n.kategori === 'Tinggi');
+            const tableBody = document.getElementById('high-risk-table-body');
+            tableBody.innerHTML = '';
+            
+            highRiskData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.nama}</td>
+                    <td>${data.bentuk}</td>
+                    <td>${data.skor}</td>
+                    <td><span class="badge bg-danger">${data.kategori}</span></td>
+                    <td>${formatDate(data.tanggal)}</td>
+                    <td>Due diligence mendalam diperlukan</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary view-detail-3" data-id="${data.id}">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Tambahkan event listener untuk tombol detail
+            document.querySelectorAll('.view-detail-3').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    showDetailModal(id);
+                });
+            });
+        }
+
+        // Fungsi untuk memuat pengaturan
+        function loadPengaturan() {
+            const settings = loadSettings();
+            
+            document.getElementById('threshold-low').value = settings.thresholdLow;
+            document.getElementById('threshold-medium').value = settings.thresholdMedium;
+            document.getElementById('threshold-high').value = settings.thresholdHigh;
+        }
+
+        // Fungsi untuk export data ke JSON
+        function exportToJSON() {
+            const dataStr = JSON.stringify(nasabahData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `cdd_korporasi_backup_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        // Fungsi untuk export data ke CSV
+        function exportToCSV() {
+            let csv = 'Nama Korporasi,Bentuk Korporasi,NPWP,Bidang Usaha,Provinsi,Tanggal Transaksi,Jenis Jasa,Nilai Transaksi,Skor Risiko,Kategori Risiko\n';
+            
+            nasabahData.forEach(item => {
+                csv += `"${item.nama}","${item.bentuk}","${item.npwp}","${item.bidangUsaha}","${item.provinsi}","${item.tanggal}","${item.jasa}",${item.nilaiTransaksi},${item.skor},"${item.kategori}"\n`;
+            });
+            
+            const dataBlob = new Blob([csv], { type: 'text/csv' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `cdd_korporasi_backup_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // Fungsi untuk import data dari file
+        function importFromFile(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    let importedData;
+                    
+                    if (file.name.endsWith('.json')) {
+                        importedData = JSON.parse(e.target.result);
+                    } else if (file.name.endsWith('.csv')) {
+                        // Parsing CSV (sederhana)
+                        const lines = e.target.result.split('\n');
+                        const headers = lines[0].split(',');
+                        
+                        importedData = [];
+                        for (let i = 1; i < lines.length; i++) {
+                            if (lines[i].trim() === '') continue;
+                            
+                            const values = lines[i].split(',');
+                            const item = {};
+                            
+                            headers.forEach((header, index) => {
+                                let value = values[index] || '';
+                                // Remove quotes if present
+                                if (value.startsWith('"') && value.endsWith('"')) {
+                                    value = value.substring(1, value.length - 1);
+                                }
+                                item[header.trim()] = value.trim();
+                            });
+                            
+                            importedData.push(item);
+                        }
+                    } else {
+                        throw new Error('Format file tidak didukung');
+                    }
+                    
+                    if (confirm(`Anda akan mengimpor ${importedData.length} data. Data yang ada akan digantikan. Lanjutkan?`)) {
+                        nasabahData = importedData;
+                        saveData();
+                        showNotification(`Berhasil mengimpor ${importedData.length} data`, 'success');
+                        loadDashboardData();
+                    }
+                } catch (error) {
+                    showNotification('Gagal mengimpor data: ' + error.message, 'danger');
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Muat data dari localStorage
+            loadData();
+            
+            // Tampilkan dashboard sebagai default
+            showSection('dashboard-section');
+            
+            // Navigasi sidebar
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('data-section') + '-section';
+                    showSection(sectionId);
+                });
+            });
+            
+            // Navigasi form step
+            document.getElementById('btn-next-1').addEventListener('click', function() {
+                if (validateStep(1)) showStep(2);
+            });
+            
+            document.getElementById('btn-next-2').addEventListener('click', function() {
+                if (validateStep(2)) showStep(3);
+            });
+            
+            document.getElementById('btn-next-3').addEventListener('click', function() {
+                if (validateStep(3)) showStep(4);
+            });
+            
+            document.getElementById('btn-next-4').addEventListener('click', function() {
+                if (validateStep(4)) showStep(5);
+            });
+            
+            document.getElementById('btn-next-5').addEventListener('click', function() {
+                if (validateStep(5)) showStep(6);
+            });
+            
+            document.getElementById('btn-prev-2').addEventListener('click', function() {
+                showStep(1);
+            });
+            
+            document.getElementById('btn-prev-3').addEventListener('click', function() {
+                showStep(2);
+            });
+            
+            document.getElementById('btn-prev-4').addEventListener('click', function() {
+                showStep(3);
+            });
+            
+            document.getElementById('btn-prev-5').addEventListener('click', function() {
+                showStep(4);
+            });
+            
+            document.getElementById('btn-prev-6').addEventListener('click', function() {
+                showStep(5);
+            });
+            
+            // Tombol kembali ke dashboard
+            document.getElementById('btn-to-dashboard').addEventListener('click', function() {
+                showSection('dashboard-section');
+            });
+            
+            // Tombol CDD Baru dari berbagai section
+            document.getElementById('btn-new-cdd').addEventListener('click', function() {
+                showSection('form-cdd-section');
+                showStep(1);
+            });
+            
+            document.getElementById('btn-new-cdd-2').addEventListener('click', function() {
+                showSection('form-cdd-section');
+                showStep(1);
+            });
+            
+            // Refresh data
+            document.getElementById('btn-refresh-dashboard').addEventListener('click', function() {
+                loadDashboardData();
+                showNotification('Data dashboard diperbarui', 'success');
+            });
+            
+            document.getElementById('btn-refresh-data').addEventListener('click', function() {
+                loadDataNasabah();
+                showNotification('Data nasabah diperbarui', 'success');
+            });
+            
+            // Toggle form kuasa
+            document.querySelectorAll('input[name="menggunakan-kuasa"]').forEach(radio => {
+                radio.addEventListener('change', toggleKuasaForm);
+            });
+            
+            // Toggle detail aset
+            document.getElementById('tanah-bangunan').addEventListener('change', function() {
+                toggleAssetDetail('tanah-bangunan', 'detail-tanah');
+            });
+            
+            document.getElementById('kendaraan').addEventListener('change', function() {
+                toggleAssetDetail('kendaraan', 'detail-kendaraan');
+            });
+            
+            document.getElementById('rekening-bank').addEventListener('change', function() {
+                toggleAssetDetail('rekening-bank', 'detail-rekening');
+            });
+            
+            document.getElementById('investasi-saham').addEventListener('change', function() {
+                toggleAssetDetail('investasi-saham', 'detail-investasi');
+            });
+            
+            // File upload
+            document.getElementById('file-upload-area').addEventListener('click', function() {
+                document.getElementById('surat-kuasa-file').click();
+            });
+            
+            document.getElementById('surat-kuasa-file').addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : 'Tidak ada file dipilih';
+                document.getElementById('file-name').textContent = fileName;
+                document.getElementById('file-upload-area').classList.add('active');
+            });
+            
+            // Tambah pemilik manfaat
+            document.getElementById('btn-tambah-pemilik').addEventListener('click', function() {
+                // Reset form
+                document.getElementById('form-pemilik').reset();
+                editOwnerIndex = -1;
+                
+                const modal = new bootstrap.Modal(document.getElementById('modalPemilik'));
+                modal.show();
+            });
+            
+            // Simpan pemilik manfaat
+            document.getElementById('btn-simpan-pemilik').addEventListener('click', function() {
+                const nama = document.getElementById('modal-nama').value;
+                const nik = document.getElementById('modal-nik').value;
+                const alamat = document.getElementById('modal-alamat').value;
+                const persentase = document.getElementById('modal-persentase').value;
+                const jabatan = document.getElementById('modal-jabatan').value;
+                const telepon = document.getElementById('modal-telepon').value;
+                
+                if (!nama || !nik || !alamat || !persentase || !jabatan || !telepon) {
+                    showNotification('Semua field harus diisi', 'warning');
+                    return;
+                }
+                
+                if (nik.length !== 16) {
+                    showNotification('NIK harus 16 digit', 'warning');
+                    return;
+                }
+                
+                const owner = {
+                    nama,
+                    nik,
+                    alamat,
+                    persentase,
+                    jabatan,
+                    telepon
+                };
+                
+                if (editOwnerIndex >= 0) {
+                    // Edit existing owner
+                    beneficialOwners[editOwnerIndex] = owner;
+                } else {
+                    // Add new owner
+                    addBeneficialOwner(owner);
+                }
+                
+                // Close modal
+                bootstrap.Modal.getInstance(document.getElementById('modalPemilik')).hide();
+                showNotification('Data pemilik manfaat berhasil disimpan', 'success');
+            });
+            
+            // Penilaian risiko - update nilai slider
+            document.getElementById('profil-korporasi').addEventListener('input', function() {
+                document.getElementById('profil-korporasi-value').textContent = this.value;
+                calculateRiskScore();
+            });
+            
+            document.getElementById('profil-bisnis').addEventListener('input', function() {
+                document.getElementById('profil-bisnis-value').textContent = this.value;
+                calculateRiskScore();
+            });
+            
+            document.getElementById('wilayah-negara').addEventListener('input', function() {
+                document.getElementById('wilayah-negara-value').textContent = this.value;
+                calculateRiskScore();
+            });
+            
+            document.getElementById('jenis-jasa-risiko').addEventListener('input', function() {
+                document.getElementById('jenis-jasa-risiko-value').textContent = this.value;
+                calculateRiskScore();
+            });
+            
+            document.getElementById('nilai-transaksi-risiko').addEventListener('input', function() {
+                document.getElementById('nilai-transaksi-risiko-value').textContent = this.value;
+                calculateRiskScore();
+            });
+            
+            // Simpan data CDD
+            document.getElementById('btn-simpan-data').addEventListener('click', function() {
+                // Validasi step terakhir
+                if (!validateStep(6)) {
+                    showNotification('Harap lengkapi semua field yang diperlukan', 'warning');
+                    return;
+                }
+                
+                // Hitung skor risiko
+                const riskAssessment = calculateRiskScore();
+                
+                // Kumpulkan data dari form
+                const formData = {
+                    id: nasabahData.length > 0 ? Math.max(...nasabahData.map(n => n.id)) + 1 : 1,
+                    nama: document.getElementById('nama-korporasi').value,
+                    bentuk: document.querySelector('input[name="bentuk-korporasi"]:checked').value,
+                    npwp: document.getElementById('npwp').value,
+                    bidangUsaha: document.getElementById('bidang-usaha').value,
+                    provinsi: document.getElementById('provinsi').value,
+                    alamat: document.getElementById('alamat-akta').value,
+                    alamatUsaha: document.getElementById('alamat-usaha').value,
+                    noAktaPendirian: document.getElementById('no-akta-pendirian').value,
+                    telepon: document.getElementById('telepon-korporasi').value,
+                    faksimili: document.getElementById('faksimili').value,
+                    noSkPengesahan: document.getElementById('no-sk-pengesahan').value,
+                    tanggalSkPengesahan: document.getElementById('tanggal-sk-pengesahan').value,
+                    noIjinUsaha: document.getElementById('no-ijin-usaha').value,
+                    tanggalIjinUsaha: document.getElementById('tanggal-ijin-usaha').value,
+                    sumberDana: document.getElementById('sumber-dana').value,
+                    nilaiAset: document.getElementById('nilai-aset').value,
+                    omzetTahunan: document.getElementById('omzet-tahunan').value,
+                    jumlahKaryawan: document.getElementById('jumlah-karyawan').value,
+                    menggunakanKuasa: document.querySelector('input[name="menggunakan-kuasa"]:checked').value,
+                    namaKuasa: document.getElementById('nama-kuasa').value,
+                    nikKuasa: document.getElementById('nik-kuasa').value,
+                    alamatKuasa: document.getElementById('alamat-kuasa').value,
+                    noSuratKuasa: document.getElementById('no-surat-kuasa').value,
+                    tanggalSuratKuasa: document.getElementById('tanggal-surat-kuasa').value,
+                    jenisJasa: document.getElementById('jenis-jasa').value,
+                    tanggal: document.getElementById('tanggal-transaksi').value,
+                    detailJasa: document.getElementById('detail-jasa').value,
+                    nilaiTransaksi: document.getElementById('nilai-transaksi').value,
+                    keteranganTambahan: document.getElementById('keterangan-tambahan').value,
+                    skor: riskAssessment.totalScore,
+                    kategori: riskAssessment.kategori,
+                    keteranganPenilaian: riskAssessment.keterangan,
+                    rekomendasiTindakan: riskAssessment.rekomendasi,
+                    beneficialOwners: beneficialOwners
+                };
+                
+                // Simpan data
+                nasabahData.push(formData);
+                saveData();
+                
+                // Reset form
+                document.getElementById('cdd-form').reset();
+                beneficialOwners = [];
+                updateBeneficialOwnersTable();
+                
+                // Kembali ke dashboard
+                showSection('dashboard-section');
+                showNotification('Data CDD Korporasi berhasil disimpan!', 'success');
+            });
+            
+            // Pencarian dan filter di section Data Nasabah
+            document.getElementById('search-data-nasabah').addEventListener('input', loadDataNasabah);
+            document.getElementById('filter-risk').addEventListener('change', loadDataNasabah);
+            document.getElementById('filter-bentuk').addEventListener('change', loadDataNasabah);
+            
+            // Export data
+            document.getElementById('btn-export-data').addEventListener('click', exportToCSV);
+            document.getElementById('btn-export-excel').addEventListener('click', exportToCSV);
+            
+            // Pengaturan
+            document.getElementById('btn-save-settings').addEventListener('click', function() {
+                const settings = {
+                    thresholdLow: parseInt(document.getElementById('threshold-low').value),
+                    thresholdMedium: parseInt(document.getElementById('threshold-medium').value),
+                    thresholdHigh: 100
+                };
+                
+                saveSettings(settings);
+                showNotification('Pengaturan berhasil disimpan', 'success');
+            });
+            
+            // Backup & restore
+            document.getElementById('btn-backup-json').addEventListener('click', exportToJSON);
+            document.getElementById('btn-backup-csv').addEventListener('click', exportToCSV);
+            document.getElementById('btn-restore-data').addEventListener('click', function() {
+                const fileInput = document.getElementById('restore-file');
+                if (fileInput.files.length === 0) {
+                    showNotification('Pilih file terlebih dahulu', 'warning');
+                    return;
+                }
+                
+                importFromFile(fileInput.files[0]);
+            });
+            
+            // Logout (simulasi)
+            document.getElementById('btn-logout').addEventListener('click', function() {
+                if (confirm('Apakah Anda yakin ingin keluar?')) {
+                    // Redirect ke halaman login (simulasi)
+                    showNotification('Anda telah berhasil logout', 'info');
+                    // Di implementasi nyata: window.location.href = 'login.html';
+                }
+            });
+            
+            // Auto-save draft (simulasi setiap 30 detik)
+            setInterval(() => {
+                // Di implementasi nyata, akan menyimpan data form ke temporary storage
+                console.log('Auto-save triggered');
+            }, 30000);
+        });
+    </script>
+</body>
+</html>
