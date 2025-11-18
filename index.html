@@ -6,6 +6,7 @@
     <title>Sistem CDD Korporasi - Notaris</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -236,6 +237,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
         .stats-card {
@@ -247,6 +249,42 @@
             font-size: 2.5rem;
             font-weight: bold;
             margin: 10px 0;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .pagination {
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-buttons button {
+                width: 100%;
+            }
+            
+            .data-actions {
+                flex-direction: column;
+            }
+            
+            .data-actions .search-box,
+            .data-actions .form-select {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -1213,7 +1251,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Data storage menggunakan localStorage
         const STORAGE_KEY = 'cdd_korporasi_data';
@@ -1315,93 +1352,6 @@
                 beneficialOwners: [
                     { nama: "Ketut Wirya", nik: "6789012345678901", alamat: "Jl. Kuta No. 90", persentase: 70, jabatan: "Direktur Utama", telepon: "086789012345" }
                 ]
-            },
-            { 
-                id: 6, 
-                nama: "Koperasi Sejahtera Bersama", 
-                bentuk: "Koperasi", 
-                npwp: "44.555.666.7-888.999",
-                bidangUsaha: "Simpan Pinjam",
-                tanggal: "2023-10-11", 
-                jasa: "Pengelolaan Uang", 
-                skor: 28, 
-                kategori: "Sedang",
-                provinsi: "Sumatera Utara",
-                alamat: "Jl. Koperasi No. 12, Medan",
-                nilaiTransaksi: 300000000,
-                beneficialOwners: [
-                    { nama: "M. Ridwan", nik: "7890123456789012", alamat: "Jl. Sejahtera No. 34", persentase: 10, jabatan: "Ketua", telepon: "087890123456" },
-                    { nama: "Sari Indah", nik: "8901234567890123", alamat: "Jl. Bahagia No. 56", persentase: 8, jabatan: "Bendahara", telepon: "088901234567" }
-                ]
-            },
-            { 
-                id: 7, 
-                nama: "PT Bumi Alam Lestari", 
-                bentuk: "PT", 
-                npwp: "55.666.777.8-999.000",
-                bidangUsaha: "Perkebunan",
-                tanggal: "2023-11-03", 
-                jasa: "Pembayaran Pajak", 
-                skor: 45, 
-                kategori: "Tinggi",
-                provinsi: "Kalimantan Timur",
-                alamat: "Jl. Perkebunan No. 45, Samarinda",
-                nilaiTransaksi: 800000000,
-                beneficialOwners: [
-                    { nama: "H. Abdul Rahman", nik: "9012345678901234", alamat: "Jl. Sawit No. 67", persentase: 55, jabatan: "Komisaris Utama", telepon: "089012345678" }
-                ]
-            },
-            { 
-                id: 8, 
-                nama: "Firma Hukum Adil", 
-                bentuk: "Firma", 
-                npwp: "66.777.888.9-000.111",
-                bidangUsaha: "Jasa Hukum",
-                tanggal: "2023-12-14", 
-                jasa: "Pendirian Badan Usaha", 
-                skor: 12, 
-                kategori: "Rendah",
-                provinsi: "DKI Jakarta",
-                alamat: "Jl. Hukum No. 89, Jakarta Pusat",
-                nilaiTransaksi: 150000000,
-                beneficialOwners: [
-                    { nama: "Dr. Bambang S.H., M.H.", nik: "0123456789012345", alamat: "Jl. Keadilan No. 12", persentase: 50, jabatan: "Partner", telepon: "081123456789" },
-                    { nama: "Drs. Santoso, S.H.", nik: "1122334455667788", alamat: "Jl. Kebenaran No. 34", persentase: 50, jabatan: "Partner", telepon: "082234567890" }
-                ]
-            },
-            { 
-                id: 9, 
-                nama: "PT Teknologi Inovasi", 
-                bentuk: "PT", 
-                npwp: "22.333.444.5-666.777",
-                bidangUsaha: "Teknologi Informasi",
-                tanggal: "2024-01-22", 
-                jasa: "Pengoperasian Perusahaan", 
-                skor: 32, 
-                kategori: "Sedang",
-                provinsi: "Jawa Barat",
-                alamat: "Jl. Teknologi No. 56, Bandung",
-                nilaiTransaksi: 500000000,
-                beneficialOwners: [
-                    { nama: "Andi Prasetyo", nik: "2233445566778899", alamat: "Jl. Inovasi No. 78", persentase: 45, jabatan: "Direktur Teknologi", telepon: "083345678901" }
-                ]
-            },
-            { 
-                id: 10, 
-                nama: "CV Mandiri Jaya", 
-                bentuk: "CV", 
-                npwp: "88.999.000.1-222.333",
-                bidangUsaha: "Konstruksi",
-                tanggal: "2024-02-05", 
-                jasa: "Penjualan Properti", 
-                skor: 48, 
-                kategori: "Tinggi",
-                provinsi: "Jawa Timur",
-                alamat: "Jl. Konstruksi No. 90, Surabaya",
-                nilaiTransaksi: 950000000,
-                beneficialOwners: [
-                    { nama: "Joko Susilo", nik: "3344556677889900", alamat: "Jl. Bangunan No. 23", persentase: 75, jabatan: "Pemilik", telepon: "084456789012" }
-                ]
             }
         ];
 
@@ -1414,11 +1364,17 @@
 
         // Fungsi untuk memuat data dari localStorage
         function loadData() {
-            const storedData = localStorage.getItem(STORAGE_KEY);
-            if (storedData) {
-                nasabahData = JSON.parse(storedData);
-            } else {
-                // Jika tidak ada data, gunakan sample data
+            try {
+                const storedData = localStorage.getItem(STORAGE_KEY);
+                if (storedData) {
+                    nasabahData = JSON.parse(storedData);
+                } else {
+                    // Jika tidak ada data, gunakan sample data
+                    nasabahData = sampleData;
+                    saveData();
+                }
+            } catch (error) {
+                console.error("Error loading data:", error);
                 nasabahData = sampleData;
                 saveData();
             }
@@ -1426,24 +1382,39 @@
 
         // Fungsi untuk menyimpan data ke localStorage
         function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(nasabahData));
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(nasabahData));
+            } catch (error) {
+                console.error("Error saving data:", error);
+                showNotification("Gagal menyimpan data", "danger");
+            }
         }
 
         // Fungsi untuk memuat pengaturan
         function loadSettings() {
-            const storedSettings = localStorage.getItem(SETTINGS_KEY);
-            if (storedSettings) {
-                return JSON.parse(storedSettings);
-            } else {
-                // Jika tidak ada pengaturan, gunakan default
-                saveSettings(defaultSettings);
+            try {
+                const storedSettings = localStorage.getItem(SETTINGS_KEY);
+                if (storedSettings) {
+                    return JSON.parse(storedSettings);
+                } else {
+                    // Jika tidak ada pengaturan, gunakan default
+                    saveSettings(defaultSettings);
+                    return defaultSettings;
+                }
+            } catch (error) {
+                console.error("Error loading settings:", error);
                 return defaultSettings;
             }
         }
 
         // Fungsi untuk menyimpan pengaturan
         function saveSettings(settings) {
-            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            try {
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            } catch (error) {
+                console.error("Error saving settings:", error);
+                showNotification("Gagal menyimpan pengaturan", "danger");
+            }
         }
 
         // Fungsi untuk menampilkan notifikasi
@@ -1462,17 +1433,25 @@
 
         // Fungsi untuk memformat tanggal
         function formatDate(dateString) {
-            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-            return new Date(dateString).toLocaleDateString('id-ID', options);
+            try {
+                const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                return new Date(dateString).toLocaleDateString('id-ID', options);
+            } catch (error) {
+                return dateString;
+            }
         }
 
         // Fungsi untuk memformat angka sebagai Rupiah
         function formatRupiah(angka) {
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 0
-            }).format(angka);
+            try {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(angka);
+            } catch (error) {
+                return angka;
+            }
         }
 
         // Fungsi untuk navigasi antar section
@@ -1483,14 +1462,20 @@
             });
             
             // Tampilkan section yang dipilih
-            document.getElementById(sectionId).classList.add('active');
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
             
             // Update sidebar
             document.querySelectorAll('.sidebar .nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             
-            document.querySelector(`.sidebar .nav-link[data-section="${sectionId}"]`).classList.add('active');
+            const activeLink = document.querySelector(`.sidebar .nav-link[data-section="${sectionId.replace('-section', '')}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
             
             // Jika section adalah dashboard, muat ulang data
             if (sectionId === 'dashboard-section') {
@@ -1501,6 +1486,9 @@
                 loadLaporanRisiko();
             } else if (sectionId === 'pengaturan-section') {
                 loadPengaturan();
+            } else if (sectionId === 'form-cdd-section') {
+                // Reset form ketika membuka form CDD
+                resetForm();
             }
         }
 
@@ -1512,7 +1500,10 @@
             });
             
             // Tampilkan step yang dipilih
-            document.getElementById(`step-${step}`).classList.add('active');
+            const targetStep = document.getElementById(`step-${step}`);
+            if (targetStep) {
+                targetStep.classList.add('active');
+            }
             
             // Update progress indicator
             document.querySelectorAll('.step').forEach(el => {
@@ -1521,40 +1512,77 @@
             
             for (let i = 1; i <= step; i++) {
                 const stepEl = document.querySelector(`.step[data-step="${i}"]`);
-                if (i === step) {
-                    stepEl.classList.add('active');
-                } else {
-                    stepEl.classList.add('completed');
+                if (stepEl) {
+                    if (i === step) {
+                        stepEl.classList.add('active');
+                    } else {
+                        stepEl.classList.add('completed');
+                    }
                 }
             }
             
             currentStep = step;
         }
 
+        // Fungsi untuk reset form
+        function resetForm() {
+            document.getElementById('cdd-form').reset();
+            beneficialOwners = [];
+            updateBeneficialOwnersTable();
+            showStep(1);
+            
+            // Reset semua invalid feedback
+            document.querySelectorAll('.is-invalid').forEach(el => {
+                el.classList.remove('is-invalid');
+            });
+            
+            // Reset file upload
+            document.getElementById('file-name').textContent = '';
+            document.getElementById('file-upload-area').classList.remove('active');
+            
+            // Reset risk assessment
+            document.getElementById('total-skor').textContent = '0';
+            document.getElementById('kategori-risiko').textContent = '-';
+            document.getElementById('keterangan-penilaian').value = '';
+            document.getElementById('rekomendasi-tindakan').value = '';
+            
+            // Reset sliders
+            const sliders = ['profil-korporasi', 'profil-bisnis', 'wilayah-negara', 'jenis-jasa-risiko', 'nilai-transaksi-risiko'];
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                if (slider) {
+                    slider.value = 0;
+                    const valueDisplay = document.getElementById(`${sliderId}-value`);
+                    if (valueDisplay) valueDisplay.textContent = '0';
+                }
+            });
+        }
+
         // Fungsi untuk validasi step
         function validateStep(step) {
             let isValid = true;
-            const form = document.getElementById('cdd-form');
             
             if (step === 1) {
                 const requiredFields = ['nama-korporasi', 'npwp', 'bidang-usaha', 'alamat-akta', 'alamat-usaha', 'provinsi', 'no-akta-pendirian', 'telepon-korporasi'];
                 
                 requiredFields.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
-                    if (!field.value.trim()) {
+                    if (field && (!field.value || field.value.trim() === '')) {
                         field.classList.add('is-invalid');
                         isValid = false;
-                    } else {
+                    } else if (field) {
                         field.classList.remove('is-invalid');
                     }
                 });
                 
                 // Validasi format NPWP
-                const npwp = document.getElementById('npwp').value;
-                const npwpRegex = /^\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3}$/;
-                if (!npwpRegex.test(npwp)) {
-                    document.getElementById('npwp').classList.add('is-invalid');
-                    isValid = false;
+                const npwpField = document.getElementById('npwp');
+                if (npwpField && npwpField.value) {
+                    const npwpRegex = /^\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3}$/;
+                    if (!npwpRegex.test(npwpField.value)) {
+                        npwpField.classList.add('is-invalid');
+                        isValid = false;
+                    }
                 }
             }
             
@@ -1564,10 +1592,10 @@
                 
                 requiredFields.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
-                    if (!field.value || field.value <= 0) {
+                    if (field && (!field.value || field.value <= 0)) {
                         field.classList.add('is-invalid');
                         isValid = false;
-                    } else {
+                    } else if (field) {
                         field.classList.remove('is-invalid');
                     }
                 });
@@ -1581,24 +1609,23 @@
             }
             
             if (step === 4) {
-                const menggunakanKuasa = document.querySelector('input[name="menggunakan-kuasa"]:checked').value;
-                
-                if (menggunakanKuasa === 'Ya') {
+                const menggunakanKuasa = document.querySelector('input[name="menggunakan-kuasa"]:checked');
+                if (menggunakanKuasa && menggunakanKuasa.value === 'Ya') {
                     const requiredFields = ['nama-kuasa', 'nik-kuasa', 'alamat-kuasa', 'no-surat-kuasa', 'tanggal-surat-kuasa'];
                     
                     requiredFields.forEach(fieldId => {
                         const field = document.getElementById(fieldId);
-                        if (!field.value.trim()) {
+                        if (field && (!field.value || field.value.trim() === '')) {
                             field.classList.add('is-invalid');
                             isValid = false;
-                        } else {
+                        } else if (field) {
                             field.classList.remove('is-invalid');
                         }
                     });
                     
                     // Validasi file upload
                     const fileInput = document.getElementById('surat-kuasa-file');
-                    if (!fileInput.files.length) {
+                    if (fileInput && !fileInput.files.length) {
                         document.getElementById('file-upload-area').classList.add('is-invalid');
                         isValid = false;
                     } else {
@@ -1612,10 +1639,10 @@
                 
                 requiredFields.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
-                    if (!field.value || (field.type === 'number' && field.value <= 0)) {
+                    if (field && (!field.value || (field.type === 'number' && field.value <= 0))) {
                         field.classList.add('is-invalid');
                         isValid = false;
-                    } else {
+                    } else if (field) {
                         field.classList.remove('is-invalid');
                     }
                 });
@@ -1626,11 +1653,11 @@
 
         // Fungsi untuk menghitung skor risiko
         function calculateRiskScore() {
-            const profilKorporasi = parseInt(document.getElementById('profil-korporasi').value);
-            const profilBisnis = parseInt(document.getElementById('profil-bisnis').value);
-            const wilayahNegara = parseInt(document.getElementById('wilayah-negara').value);
-            const jenisJasa = parseInt(document.getElementById('jenis-jasa-risiko').value);
-            const nilaiTransaksi = parseInt(document.getElementById('nilai-transaksi-risiko').value);
+            const profilKorporasi = parseInt(document.getElementById('profil-korporasi').value) || 0;
+            const profilBisnis = parseInt(document.getElementById('profil-bisnis').value) || 0;
+            const wilayahNegara = parseInt(document.getElementById('wilayah-negara').value) || 0;
+            const jenisJasa = parseInt(document.getElementById('jenis-jasa-risiko').value) || 0;
+            const nilaiTransaksi = parseInt(document.getElementById('nilai-transaksi-risiko').value) || 0;
             
             const totalScore = profilKorporasi + profilBisnis + wilayahNegara + jenisJasa + nilaiTransaksi;
             
@@ -1668,12 +1695,14 @@
         // Fungsi untuk menampilkan/menyembunyikan form kuasa
         function toggleKuasaForm() {
             const formKuasa = document.getElementById('form-kuasa');
-            const menggunakanKuasa = document.querySelector('input[name="menggunakan-kuasa"]:checked').value;
+            const menggunakanKuasa = document.querySelector('input[name="menggunakan-kuasa"]:checked');
             
-            if (menggunakanKuasa === 'Ya') {
-                formKuasa.style.display = 'block';
-            } else {
-                formKuasa.style.display = 'none';
+            if (menggunakanKuasa && formKuasa) {
+                if (menggunakanKuasa.value === 'Ya') {
+                    formKuasa.style.display = 'block';
+                } else {
+                    formKuasa.style.display = 'none';
+                }
             }
         }
 
@@ -1682,10 +1711,12 @@
             const checkbox = document.getElementById(checkboxId);
             const input = document.getElementById(inputId);
             
-            if (checkbox.checked) {
-                input.style.display = 'block';
-            } else {
-                input.style.display = 'none';
+            if (checkbox && input) {
+                if (checkbox.checked) {
+                    input.style.display = 'block';
+                } else {
+                    input.style.display = 'none';
+                }
             }
         }
 
@@ -1698,6 +1729,8 @@
         // Fungsi untuk memperbarui tabel pemilik manfaat
         function updateBeneficialOwnersTable() {
             const tableBody = document.getElementById('pemilik-table-body');
+            if (!tableBody) return;
+            
             tableBody.innerHTML = '';
             
             beneficialOwners.forEach((owner, index) => {
@@ -1739,25 +1772,33 @@
 
         // Fungsi untuk mengedit pemilik manfaat
         function editBeneficialOwner(index) {
+            if (index < 0 || index >= beneficialOwners.length) return;
+            
             const owner = beneficialOwners[index];
-            document.getElementById('modal-nama').value = owner.nama;
-            document.getElementById('modal-nik').value = owner.nik;
-            document.getElementById('modal-alamat').value = owner.alamat;
-            document.getElementById('modal-persentase').value = owner.persentase;
-            document.getElementById('modal-jabatan').value = owner.jabatan;
-            document.getElementById('modal-telepon').value = owner.telepon;
+            document.getElementById('modal-nama').value = owner.nama || '';
+            document.getElementById('modal-nik').value = owner.nik || '';
+            document.getElementById('modal-alamat').value = owner.alamat || '';
+            document.getElementById('modal-persentase').value = owner.persentase || '';
+            document.getElementById('modal-jabatan').value = owner.jabatan || '';
+            document.getElementById('modal-telepon').value = owner.telepon || '';
             
             editOwnerIndex = index;
             
-            const modal = new bootstrap.Modal(document.getElementById('modalPemilik'));
-            modal.show();
+            const modalElement = document.getElementById('modalPemilik');
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            }
         }
 
         // Fungsi untuk menghapus pemilik manfaat
         function deleteBeneficialOwner(index) {
+            if (index < 0 || index >= beneficialOwners.length) return;
+            
             if (confirm('Apakah Anda yakin ingin menghapus pemilik manfaat ini?')) {
                 beneficialOwners.splice(index, 1);
                 updateBeneficialOwnersTable();
+                showNotification('Pemilik manfaat berhasil dihapus', 'success');
             }
         }
 
@@ -1775,24 +1816,41 @@
             document.getElementById('risk-medium-count').textContent = riskMediumCount;
             document.getElementById('risk-high-count').textContent = riskHighCount;
             
-            // Tampilkan data terbaru (10 data pertama)
+            // Tampilkan data terbaru
             const tableBody = document.getElementById('nasabah-table-body');
+            if (!tableBody) return;
+            
             tableBody.innerHTML = '';
             
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = Math.min(startIndex + itemsPerPage, nasabahData.length);
-            const currentData = nasabahData.slice(startIndex, endIndex);
+            // Filter data berdasarkan pencarian
+            const searchTerm = document.getElementById('search-nasabah').value.toLowerCase();
+            let filteredData = nasabahData;
             
-            currentData.forEach(data => {
+            if (searchTerm) {
+                filteredData = nasabahData.filter(data => 
+                    data.nama.toLowerCase().includes(searchTerm) || 
+                    data.bentuk.toLowerCase().includes(searchTerm) ||
+                    data.jasa.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Urutkan data berdasarkan tanggal terbaru
+            filteredData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+            const currentData = filteredData.slice(startIndex, endIndex);
+            
+            currentData.forEach((data, index) => {
                 const row = document.createElement('tr');
                 
                 let riskClass = '';
-                if (data.kategori === 'Rendah') riskClass = 'table-success';
-                else if (data.kategori === 'Sedang') riskClass = 'table-warning';
-                else if (data.kategori === 'Tinggi') riskClass = 'table-danger';
+                if (data.kategori === 'Rendah') riskClass = 'bg-success';
+                else if (data.kategori === 'Sedang') riskClass = 'bg-warning';
+                else if (data.kategori === 'Tinggi') riskClass = 'bg-danger';
                 
                 row.innerHTML = `
-                    <td>${data.id}</td>
+                    <td>${startIndex + index + 1}</td>
                     <td>${data.nama}</td>
                     <td>${data.bentuk}</td>
                     <td>${formatDate(data.tanggal)}</td>
@@ -1816,7 +1874,7 @@
             });
             
             // Setup pagination
-            setupPagination('pagination-container', nasabahData.length, currentPage);
+            setupPagination('pagination-container', filteredData.length, currentPage);
             
             // Tambahkan event listener untuk tombol aksi
             document.querySelectorAll('.view-detail').forEach(btn => {
@@ -1845,7 +1903,11 @@
         function setupPagination(containerId, totalItems, currentPage) {
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             const paginationContainer = document.getElementById(containerId);
+            if (!paginationContainer) return;
+            
             paginationContainer.innerHTML = '';
+            
+            if (totalPages <= 1) return;
             
             // Tombol Previous
             const prevLi = document.createElement('li');
@@ -1854,7 +1916,10 @@
             paginationContainer.appendChild(prevLi);
             
             // Numbered pages
-            for (let i = 1; i <= totalPages; i++) {
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+            
+            for (let i = startPage; i <= endPage; i++) {
                 const pageLi = document.createElement('li');
                 pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
                 pageLi.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
@@ -1872,9 +1937,13 @@
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const page = parseInt(this.getAttribute('data-page'));
-                    if (page && page !== currentPage) {
+                    if (page && page !== currentPage && page >= 1 && page <= totalPages) {
                         currentPage = page;
-                        loadDashboardData();
+                        if (containerId === 'pagination-container') {
+                            loadDashboardData();
+                        } else if (containerId === 'pagination-data-nasabah') {
+                            loadDataNasabah();
+                        }
                     }
                 });
             });
@@ -1886,6 +1955,8 @@
             if (!data) return;
             
             const modalBody = document.getElementById('modal-detail-body');
+            if (!modalBody) return;
+            
             modalBody.innerHTML = `
                 <div class="row">
                     <div class="col-md-6">
@@ -1972,13 +2043,15 @@
                 </div>
             `;
             
-            const modal = new bootstrap.Modal(document.getElementById('modalDetail'));
-            modal.show();
+            const modalElement = document.getElementById('modalDetail');
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            }
         }
 
         // Fungsi untuk mengedit data
         function editData(id) {
-            // Implementasi edit data
             showNotification('Fitur edit data akan segera tersedia', 'info');
         }
 
@@ -1995,6 +2068,8 @@
         // Fungsi untuk memuat data nasabah di section Data Nasabah
         function loadDataNasabah() {
             const tableBody = document.getElementById('data-nasabah-table-body');
+            if (!tableBody) return;
+            
             tableBody.innerHTML = '';
             
             // Filter data berdasarkan pencarian dan filter
@@ -2013,7 +2088,11 @@
             });
             
             // Tampilkan data yang sudah difilter
-            filteredData.forEach(data => {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+            const currentData = filteredData.slice(startIndex, endIndex);
+            
+            currentData.forEach((data, index) => {
                 const row = document.createElement('tr');
                 
                 let riskClass = '';
@@ -2022,7 +2101,7 @@
                 else if (data.kategori === 'Tinggi') riskClass = 'bg-danger';
                 
                 row.innerHTML = `
-                    <td>${data.id}</td>
+                    <td>${startIndex + index + 1}</td>
                     <td>${data.nama}</td>
                     <td>${data.bentuk}</td>
                     <td>${data.npwp}</td>
@@ -2093,7 +2172,8 @@
             document.getElementById('month-trend').textContent = monthTrend;
             
             // Buat chart
-            const ctx = document.getElementById('riskChart').getContext('2d');
+            const ctx = document.getElementById('riskChart');
+            if (!ctx) return;
             
             if (riskChart) {
                 riskChart.destroy();
@@ -2130,6 +2210,8 @@
             // Tampilkan data nasabah dengan risiko tinggi
             const highRiskData = nasabahData.filter(n => n.kategori === 'Tinggi');
             const tableBody = document.getElementById('high-risk-table-body');
+            if (!tableBody) return;
+            
             tableBody.innerHTML = '';
             
             highRiskData.forEach(data => {
@@ -2176,7 +2258,11 @@
             const link = document.createElement('a');
             link.href = URL.createObjectURL(dataBlob);
             link.download = `cdd_korporasi_backup_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Backup JSON berhasil diunduh', 'success');
         }
 
         // Fungsi untuk export data ke CSV
@@ -2187,12 +2273,16 @@
                 csv += `"${item.nama}","${item.bentuk}","${item.npwp}","${item.bidangUsaha}","${item.provinsi}","${item.tanggal}","${item.jasa}",${item.nilaiTransaksi},${item.skor},"${item.kategori}"\n`;
             });
             
-            const dataBlob = new Blob([csv], { type: 'text/csv' });
+            const dataBlob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             
             const link = document.createElement('a');
             link.href = URL.createObjectURL(dataBlob);
             link.download = `cdd_korporasi_backup_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Backup CSV berhasil diunduh', 'success');
         }
 
         // Fungsi untuk import data dari file
@@ -2309,15 +2399,17 @@
                 showSection('dashboard-section');
             });
             
+            document.getElementById('btn-back-dashboard').addEventListener('click', function() {
+                showSection('dashboard-section');
+            });
+            
             // Tombol CDD Baru dari berbagai section
             document.getElementById('btn-new-cdd').addEventListener('click', function() {
                 showSection('form-cdd-section');
-                showStep(1);
             });
             
             document.getElementById('btn-new-cdd-2').addEventListener('click', function() {
                 showSection('form-cdd-section');
-                showStep(1);
             });
             
             // Refresh data
@@ -2354,9 +2446,12 @@
             });
             
             // File upload
-            document.getElementById('file-upload-area').addEventListener('click', function() {
-                document.getElementById('surat-kuasa-file').click();
-            });
+            const fileUploadArea = document.getElementById('file-upload-area');
+            if (fileUploadArea) {
+                fileUploadArea.addEventListener('click', function() {
+                    document.getElementById('surat-kuasa-file').click();
+                });
+            }
             
             document.getElementById('surat-kuasa-file').addEventListener('change', function() {
                 const fileName = this.files[0] ? this.files[0].name : 'Tidak ada file dipilih';
@@ -2370,8 +2465,11 @@
                 document.getElementById('form-pemilik').reset();
                 editOwnerIndex = -1;
                 
-                const modal = new bootstrap.Modal(document.getElementById('modalPemilik'));
-                modal.show();
+                const modalElement = document.getElementById('modalPemilik');
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                }
             });
             
             // Simpan pemilik manfaat
@@ -2411,7 +2509,11 @@
                 }
                 
                 // Close modal
-                bootstrap.Modal.getInstance(document.getElementById('modalPemilik')).hide();
+                const modalElement = document.getElementById('modalPemilik');
+                if (modalElement) {
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) modal.hide();
+                }
                 showNotification('Data pemilik manfaat berhasil disimpan', 'success');
             });
             
@@ -2496,9 +2598,7 @@
                 saveData();
                 
                 // Reset form
-                document.getElementById('cdd-form').reset();
-                beneficialOwners = [];
-                updateBeneficialOwnersTable();
+                resetForm();
                 
                 // Kembali ke dashboard
                 showSection('dashboard-section');
@@ -2510,6 +2610,9 @@
             document.getElementById('filter-risk').addEventListener('change', loadDataNasabah);
             document.getElementById('filter-bentuk').addEventListener('change', loadDataNasabah);
             
+            // Pencarian di dashboard
+            document.getElementById('search-nasabah').addEventListener('input', loadDashboardData);
+            
             // Export data
             document.getElementById('btn-export-data').addEventListener('click', exportToCSV);
             document.getElementById('btn-export-excel').addEventListener('click', exportToCSV);
@@ -2517,8 +2620,8 @@
             // Pengaturan
             document.getElementById('btn-save-settings').addEventListener('click', function() {
                 const settings = {
-                    thresholdLow: parseInt(document.getElementById('threshold-low').value),
-                    thresholdMedium: parseInt(document.getElementById('threshold-medium').value),
+                    thresholdLow: parseInt(document.getElementById('threshold-low').value) || 20,
+                    thresholdMedium: parseInt(document.getElementById('threshold-medium').value) || 40,
                     thresholdHigh: 100
                 };
                 
@@ -2542,9 +2645,7 @@
             // Logout (simulasi)
             document.getElementById('btn-logout').addEventListener('click', function() {
                 if (confirm('Apakah Anda yakin ingin keluar?')) {
-                    // Redirect ke halaman login (simulasi)
                     showNotification('Anda telah berhasil logout', 'info');
-                    // Di implementasi nyata: window.location.href = 'login.html';
                 }
             });
             
